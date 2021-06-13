@@ -76,7 +76,7 @@ function morningFiveDay (array){
     let singleMorningContainer = document.createElement("div");
     singleMorningContainer.setAttribute("id","single-morning-container")
     let morningEl = document.createElement("p");
-    morningEl.innerHTML = (`<h3>0${timeConverter(array[i].dt+25200)}0</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    morningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayMorning.append(singleMorningContainer);
     singleMorningContainer.append(morningEl);
   }
@@ -87,7 +87,7 @@ function noonFiveDay (array){
     let singleNoonContainer = document.createElement("div");
     singleNoonContainer.setAttribute("id","single-noon-container")
     let noonEl = document.createElement("p");
-    noonEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}0</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    noonEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayNoon.append(singleNoonContainer);
     singleNoonContainer.append(noonEl);
   }
@@ -98,7 +98,7 @@ function eveningFiveDay (array){
     let singleEveningContainer = document.createElement("div");
     singleEveningContainer.setAttribute("id","single-evening-container")
     let eveningEl = document.createElement("p");
-    eveningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}0</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    eveningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayEvening.append(singleEveningContainer);
     singleEveningContainer.append(eveningEl);
   }
@@ -111,7 +111,17 @@ function timeConverter(UNIX_timestamp){
   let month = months[newDate.getMonth()];
   let date = newDate.getDate();
   let hour = newDate.getHours();
+  if (hour<10){
+    hour = `0${newDate.getHours()}`;
+  } else {
+    hour = newDate.getHours();
+  }
   let min = newDate.getMinutes();
+  if (min<10){
+    min = `0${newDate.getMinutes()}`;
+  } else {
+    min = newDate.getMinutes();
+  }
   let time = `${date} ${month}, ${year} ${hour}:${min}`;
   return time;
 }
