@@ -1,0 +1,8 @@
+body {
+   background-image:linear-gradient(
+        rgb(0, 132, 255) 0%,
+        rgb(10, 0, 151) 100%
+   ); 
+   color:lightblue; 
+   font-family: 'Ubuntu', sans-serif;
+}
