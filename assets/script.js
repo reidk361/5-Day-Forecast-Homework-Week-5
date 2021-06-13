@@ -36,7 +36,7 @@ function getCurrentForecast (latitude, longitude) {
   })
   .then(function (data) {
     console.log(data);
-    currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p>${data.current.weather[0].description.toUpperCase()} <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
+    currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p>${data.current.weather[0].description.toUpperCase()} <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
   })
 }
@@ -75,8 +75,9 @@ function morningFiveDay (array){
   for (var i = 0; i < 5; i++) {
     let singleMorningContainer = document.createElement("div");
     singleMorningContainer.setAttribute("id","single-morning-container")
+    singleMorningContainer.classList.add("col-lg-2" , "col-4")
     let morningEl = document.createElement("p");
-    morningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    morningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayMorning.append(singleMorningContainer);
     singleMorningContainer.append(morningEl);
   }
@@ -86,8 +87,9 @@ function noonFiveDay (array){
   for (var i = 0; i < 5; i++) {
     let singleNoonContainer = document.createElement("div");
     singleNoonContainer.setAttribute("id","single-noon-container")
+    singleNoonContainer.classList.add("col-lg-2", "col-4")
     let noonEl = document.createElement("p");
-    noonEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    noonEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayNoon.append(singleNoonContainer);
     singleNoonContainer.append(noonEl);
   }
@@ -97,8 +99,9 @@ function eveningFiveDay (array){
   for (var i = 0; i < 5; i++) {
     let singleEveningContainer = document.createElement("div");
     singleEveningContainer.setAttribute("id","single-evening-container")
+    singleEveningContainer.classList.add("col-lg-2" , "col-4")
     let eveningEl = document.createElement("p");
-    eveningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    eveningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayEvening.append(singleEveningContainer);
     singleEveningContainer.append(eveningEl);
   }
