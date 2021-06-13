@@ -34,7 +34,7 @@ function getCurrentForecast (latitude, longitude) {
   })
   .then(function (data) {
     console.log(data);
-    currentWeatherEl.innerHTML = (`<h3>Current Weather:</h3><p>${data.current.weather[0].description} <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
+    currentWeatherEl.innerHTML = (`<h3>Current Weather:</h3><br /> <img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p>${data.current.weather[0].description.toUpperCase()} <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
   })
 }
