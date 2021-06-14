@@ -15,33 +15,36 @@
     <header>
         <h1>Weather Forecast</h1>
     </header>
-    <div id= "choices" class="container">
-        <div id="input-container" class="row col-2">
-            <input type="text" name="city" placeholder="Type a city name here." id="city-input"></input>
-            <input type="submit" value="Search" id="submit-button"></input>
-        </div>
-        <div id="prev-input-container" class="row">
+    <div class="container">
+        <div id= "choices" class="row">
+            <div id="input-container" class="col-lg-3 col-md-4 col-6">
+                <input type="text" name="city" placeholder="Type a city name here." id="city-input"></input>
+                <input type="submit" value="Search" id="submit-button"></input>
+            </div>
+            <div id="city-name-container" class="col-2">
 
+            </div>
+            <div id="prev-input-container" class=col>
+
+            </div>
         </div>
     </div>
-    <div id="city-name-container">
-
-    </div>
+    
     <div id="current-weather-container" class="container">
-        <h2>Current Weather:</h2>
+        <h2>Currently:</h2>
 
     </div>
     <div id="5day-weather-container" class="container">
         <h2>5-Day Forecast:</h2>
-        <div id="5day-morning-container" class="row">
+        <div id="5day-morning-container" class="row justify-content-center">
             <h3>Morning:</h3>
 
         </div>
-        <div id="5day-noon-container" class="row">
+        <div id="5day-noon-container" class="row justify-content-center">
             <h3>Noon:</h3>
             
         </div>
-        <div id="5day-evening-container" class="row">
+        <div id="5day-evening-container" class="row justify-content-center">
             <h3>Evening:</h3>
             
         </div>

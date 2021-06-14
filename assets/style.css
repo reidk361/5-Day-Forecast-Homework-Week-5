@@ -33,11 +33,17 @@ header {
     border-radius: .5rem;
 }
 
-#single-morning-container, #single-noon-container, #single-evening-container{
+#current-container, #single-morning-container, #single-noon-container, #single-evening-container{
     padding: 1%;
     margin: 1%;
     border: 1px solid black;
     border-radius: .5rem;
+}
+
+#current-container{
+    margin:auto;
+    box-shadow: inset 0px 0px 10px
+    rgb(10, 0, 151), 0 0 15px;
 }
 
 #single-morning-container {
@@ -54,5 +60,9 @@ header {
     background-image: linear-gradient(
         rgb(0, 132, 255) 0%,
         rgb(10, 0, 151) 100%);
+}
+
+input{
+    font-size: small
 }
 

@@ -4,7 +4,7 @@ const fiveDayWeather = document.getElementById("5day-weather-container");
 const fiveDayMorning = document.getElementById("5day-morning-container");
 const fiveDayNoon = document.getElementById("5day-noon-container");
 const fiveDayEvening = document.getElementById("5day-evening-container");
-const currentWeatherEl = document.createElement("p")
+const currentWeatherEl = document.createElement("div")
 const prevInput = document.getElementById("prev-input-container");
 const inputEl = document.getElementById("city-input");
 const submitEl = document.getElementById("submit-button");
@@ -30,6 +30,8 @@ function getCity(city){
 }
 
 function getCurrentForecast (latitude, longitude) {
+  currentWeatherEl.setAttribute("id","current-container")
+  currentWeatherEl.classList.add("col-md-4", "col-6")
   fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&appid=86caed8984442f53f479ce0a825d902d&units=imperial`)
   .then(function (response) {
     return response.json();
