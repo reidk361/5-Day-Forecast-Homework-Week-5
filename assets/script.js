@@ -75,7 +75,9 @@ function getCurrentForecast (latitude, longitude) {
     currentWeather.append(currentWeatherEl);
     let uvContainer = document.getElementById("UV-container");
     let uvNum = data.daily[data.daily.length-1].uvi;
-    if (uvNum>=8){
+    if (uvNum>=11){
+      uvContainer.setAttribute("style","background-color:purple; padding:1%; border-radius: 5rem;");
+    } else if (uvNum<11&&uvNum>=8) {
       uvContainer.setAttribute("style","background-color:red; padding:1%; border-radius: 5rem;");
     } else if (uvNum<8&&uvNum>=6) {
       uvContainer.setAttribute("style","background-color:orange; padding:1%; border-radius: 5rem;");
