@@ -5,12 +5,48 @@ const fiveDayMorning = document.getElementById("5day-morning-container");
 const fiveDayNoon = document.getElementById("5day-noon-container");
 const fiveDayEvening = document.getElementById("5day-evening-container");
 const currentWeatherEl = document.createElement("div")
-const prevInput = document.getElementById("prev-input-container");
+const prevInputContainer = document.getElementById("prev-input-container");
 const inputEl = document.getElementById("city-input");
 const submitEl = document.getElementById("submit-button");
 const uvContainer = document.getElementById("UV-container");
 const cityNameEl = document.createElement("h2");
 const cityNameContainer = document.getElementById("city-name-container");
+
+let buttonEl = document.createElement("button");
+let singleMorningContainer = document.createElement("div");
+let morningEl = document.createElement("p");
+let singleNoonContainer = document.createElement("div");
+let noonEl = document.createElement("p");
+let singleEveningContainer = document.createElement("div");
+let eveningEl = document.createElement("p");
+
+
+function makeButton(city){
+  let buttonArr = Array.from(document.querySelectorAll("button"));
+  let buttonTextArr = [];
+  if (buttonArr.length>0){
+    for (let i=0; i < buttonArr.length; i++) {
+      buttonTextArr.push(buttonArr[i].innerText)}
+  }
+  buttonEl = document.createElement("button");
+  let arr = [];
+  arr.unshift(city);
+  while (arr.length > 4){
+    arr.pop();
+  }
+  console.log(arr);
+  if (!buttonTextArr.includes(city)){
+    for (var i = 0; i <arr.length; i++) {
+      buttonEl.textContent = arr[i];
+      prevInputContainer.append(buttonEl);
+      buttonEl.addEventListener("click", handleButton);
+    }
+  }
+  function handleButton (event){
+    getCity(event.target.textContent);
+  }
+}
+
 
 function getCity(city){
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=86caed8984442f53f479ce0a825d902d&units=imperial`)
@@ -20,7 +56,6 @@ function getCity(city){
   .then(function (data) {
     cityNameEl.textContent = (`${data.name}, ${data.sys.country}`);
     cityNameContainer.append(cityNameEl);
-    console.log(data);
     let lat = data.coord.lat;
     let lon = data.coord.lon;
     getCurrentForecast(lat,lon);
@@ -37,7 +72,6 @@ function getCurrentForecast (latitude, longitude) {
     return response.json();
   })
   .then(function (data) {
-    console.log(data);
     currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p>${data.current.weather[0].description.toUpperCase()} <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
   })
@@ -52,7 +86,6 @@ function get5DayForecast(id){
      return response.json();
   })
   .then(function (data) {
-    console.log(data);
     for (var i = 0; i < data.list.length; i++) {
       if (data.list[i].dt_txt.includes("06:00:00")){
         fiveDayMorningArr.push(data.list[i]);
@@ -75,10 +108,10 @@ function get5DayForecast(id){
 
 function morningFiveDay (array){
   for (var i = 0; i < 5; i++) {
-    let singleMorningContainer = document.createElement("div");
+    singleMorningContainer = document.createElement("div");
     singleMorningContainer.setAttribute("id","single-morning-container")
     singleMorningContainer.classList.add("col-lg-2" , "col-4")
-    let morningEl = document.createElement("p");
+    morningEl = document.createElement("p");
     morningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayMorning.append(singleMorningContainer);
     singleMorningContainer.append(morningEl);
@@ -87,10 +120,10 @@ function morningFiveDay (array){
 
 function noonFiveDay (array){
   for (var i = 0; i < 5; i++) {
-    let singleNoonContainer = document.createElement("div");
+    singleNoonContainer = document.createElement("div");
     singleNoonContainer.setAttribute("id","single-noon-container")
     singleNoonContainer.classList.add("col-lg-2", "col-4")
-    let noonEl = document.createElement("p");
+    noonEl = document.createElement("p");
     noonEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayNoon.append(singleNoonContainer);
     singleNoonContainer.append(noonEl);
@@ -99,10 +132,10 @@ function noonFiveDay (array){
 
 function eveningFiveDay (array){
   for (var i = 0; i < 5; i++) {
-    let singleEveningContainer = document.createElement("div");
+    singleEveningContainer = document.createElement("div");
     singleEveningContainer.setAttribute("id","single-evening-container")
     singleEveningContainer.classList.add("col-lg-2" , "col-4")
-    let eveningEl = document.createElement("p");
+    eveningEl = document.createElement("p");
     eveningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p>${array[i].weather[0].description.toUpperCase()} <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
     fiveDayEvening.append(singleEveningContainer);
     singleEveningContainer.append(eveningEl);
@@ -133,12 +166,13 @@ function timeConverter(UNIX_timestamp){
 
 function handleSubmit (event){
   event.preventDefault();
-  getCity(inputEl.value);
+  if (inputEl.value !=''){
+    getCity(inputEl.value);
+    makeButton(inputEl.value);
+  }  
   inputEl.value = '';
 }
 
-function handleButton (){
-  getCity(inputEl.value);
-}
+
 
 submitEl.addEventListener("click", handleSubmit);
