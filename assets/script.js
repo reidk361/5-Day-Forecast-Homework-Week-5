@@ -119,38 +119,50 @@ function get5DayForecast(id){
 }
 
 function morningFiveDay (array){
-  for (var i = 0; i < 5; i++) {
-    singleMorningContainer = document.createElement("div");
-    singleMorningContainer.setAttribute("id","single-morning-container")
-    singleMorningContainer.classList.add("col-lg-2" , "col-4")
-    morningEl = document.createElement("p");
-    morningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
-    fiveDayMorning.append(singleMorningContainer);
-    singleMorningContainer.append(morningEl);
+  if (!fiveDayMorning.contains(singleMorningContainer)){
+    for (var i = 0; i < 5; i++) {
+      singleMorningContainer = document.createElement("div");
+      singleMorningContainer.setAttribute("id","single-morning-container")
+      singleMorningContainer.classList.add("col-lg-2" , "col-4")
+      morningEl = document.createElement("p");
+      fiveDayMorning.append(singleMorningContainer);
+      singleMorningContainer.append(morningEl);
+    }
   }
+  for (var i = 0; i < 5; i++){
+    fiveDayMorning.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+  } 
 }
 
 function noonFiveDay (array){
-  for (var i = 0; i < 5; i++) {
-    singleNoonContainer = document.createElement("div");
-    singleNoonContainer.setAttribute("id","single-noon-container")
-    singleNoonContainer.classList.add("col-lg-2", "col-4")
-    noonEl = document.createElement("p");
-    noonEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
-    fiveDayNoon.append(singleNoonContainer);
-    singleNoonContainer.append(noonEl);
+  if (!fiveDayNoon.contains(singleNoonContainer)){
+    for (var i = 0; i < 5; i++) {
+      singleNoonContainer = document.createElement("div");
+      singleNoonContainer.setAttribute("id","single-noon-container")
+      singleNoonContainer.classList.add("col-lg-2", "col-4")
+      noonEl = document.createElement("p");
+      fiveDayNoon.append(singleNoonContainer);
+      singleNoonContainer.append(noonEl);
+    }
+  }
+  for (var i = 0; i < 5; i++){
+    fiveDayNoon.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   }
 }
 
 function eveningFiveDay (array){
-  for (var i = 0; i < 5; i++) {
-    singleEveningContainer = document.createElement("div");
-    singleEveningContainer.setAttribute("id","single-evening-container")
-    singleEveningContainer.classList.add("col-lg-2" , "col-4")
-    eveningEl = document.createElement("p");
-    eveningEl.innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
-    fiveDayEvening.append(singleEveningContainer);
-    singleEveningContainer.append(eveningEl);
+  if (!fiveDayEvening.contains(singleEveningContainer)){
+    for (var i = 0; i < 5; i++) {
+      singleEveningContainer = document.createElement("div");
+      singleEveningContainer.setAttribute("id","single-evening-container")
+      singleEveningContainer.classList.add("col-lg-2" , "col-4")
+      eveningEl = document.createElement("p");
+      fiveDayEvening.append(singleEveningContainer);
+      singleEveningContainer.append(eveningEl);
+    }
+  }
+  for (var i = 0; i < 5; i++){
+    fiveDayEvening.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   }
 }
 
