@@ -13,7 +13,7 @@ const clearEl = document.querySelector(".btn-danger");
 const cityNameEl = document.createElement("h2");
 const cityNameContainer = document.getElementById("city-name-container");
 
-//Set Global Elements that will be used in functions.
+//Set Global variables that will be used in functions.
 let buttonEl = document.createElement("button");
 let singleMorningContainer = document.createElement("div");
 let morningEl = document.createElement("p");
@@ -21,6 +21,7 @@ let singleNoonContainer = document.createElement("div");
 let noonEl = document.createElement("p");
 let singleEveningContainer = document.createElement("div");
 let eveningEl = document.createElement("p");
+let timezoneOffset = 0
 
 //Makes Buttons for previous searches. 
 function makeButton(city){
@@ -93,9 +94,6 @@ function handleLocalStorage(){
   }
 }
 
-//Loads buttons when page loads.
-document.onload = handleLocalStorage();
-
 //Gets data from search and places it into the button. 
 //Returns latitude & longitude and cityID data to pass onto other functions.  
 function getCity(city){
@@ -116,11 +114,14 @@ function getCity(city){
     getCurrentForecast(lat,lon);
     let cityId = data.id;
     get5DayForecast(cityId)
+    timezoneOffset = data.timezone;
+    console.log(timezoneOffset);
   })
 }
 
 //Uses latitude and longitude to get the current weather. 
 function getCurrentForecast (latitude, longitude) {
+
   currentWeather.setAttribute("style","");
   currentWeatherEl.setAttribute("id","current-container");
   currentWeatherEl.classList.add("col-md-4", "col-6");
@@ -128,21 +129,26 @@ function getCurrentForecast (latitude, longitude) {
   .then(function (response) {
     return response.json();
   })
-
   //Creates current weather block and adds all applicable data. 
   .then(function (data) {
-    currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${(Math.trunc(data.daily[0].uvi))}</span> <br /></p>`);
+    currentWeatherEl.innerHTML = (`<h3>${timeConverter((data.current.dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${(Math.trunc(data.daily[0].uvi))}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
-    
+
     //Changes current weather background based on time of day.
-    if (timeConvertHourOnly(data.current.dt)>=06&&
-        timeConvertHourOnly(data.current.dt)<12){
+    if (timeConvertHourOnly((data.current.dt)
+    +(timezoneOffset))>=06&&
+      timeConvertHourOnly((data.current.dt)
+    +(timezoneOffset))<12){
       currentWeatherEl.setAttribute("style","background-image: linear-gradient(rgb(206, 111, 3) 0%,rgb(0, 132, 255) 100%");
-    } else if (timeConvertHourOnly(data.current.dt)>=12&&
-        timeConvertHourOnly(data.current.dt)<18){
+    } else if (timeConvertHourOnly((data.current.dt)
+    +(timezoneOffset))>=12&&
+      timeConvertHourOnly((data.current.dt)
+    +(timezoneOffset))<18){
       currentWeatherEl.setAttribute("style", "background-color: rgb(0, 132, 255);");
-    } else if (timeConvertHourOnly(data.current.dt)>=18&&
-        timeConvertHourOnly(data.current.dt)<21){
+    } else if (timeConvertHourOnly((data.current.dt)
+    +(timezoneOffset))>=18&&
+      timeConvertHourOnly((data.current.dt)
+    +(timezoneOffset))<21){
       currentWeatherEl.setAttribute("style","background-image: linear-gradient(rgb(0, 132, 255) 0%,rgb(10, 0, 151) 100%");
     } else {
       currentWeatherEl.setAttribute("style", "background-color: rgb(10, 0, 151);");
@@ -181,17 +187,24 @@ function get5DayForecast(id){
 
   //Grabs only the applicable arrays.
   .then(function (data) {
+    console.log(timezoneOffset);
+    console.log(data);
     for (var i = 0; i < data.list.length; i++) {
-      if (data.list[i].dt_txt.includes("06:00:00")){
+      console.log(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset)));
+      //console.log(["05","06","07"].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset))));
+      //console.log([11,12,13].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset))));
+      //console.log([17,18,19].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset))));
+      if (["05","06","07"].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset)))){
         fiveDayMorningArr.push(data.list[i]);
       }
-      if (data.list[i].dt_txt.includes("12:00:00")){
+      if ([11,12,13].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset)))){
         fiveDayNoonArr.push(data.list[i]);
       }
-      if (data.list[i].dt_txt.includes("18:00:00")){
+      if ([17,18,19].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset)))){
         fiveDayEveningArr.push(data.list[i]);
       }
     }
+    console.log(fiveDayMorningArr);
     morningFiveDay(fiveDayMorningArr);
     noonFiveDay(fiveDayNoonArr);
     eveningFiveDay(fiveDayEveningArr);
@@ -212,10 +225,9 @@ function morningFiveDay (array){
       singleMorningContainer.append(morningEl);
     }
   }
-
   //Places applicable data into those blocks.
   for (var i = 0; i < 5; i++){
-    fiveDayMorning.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    fiveDayMorning.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   } 
 }
 
@@ -232,7 +244,7 @@ function noonFiveDay (array){
     }
   }
   for (var i = 0; i < 5; i++){
-    fiveDayNoon.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    fiveDayNoon.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   }
 }
 
@@ -249,12 +261,39 @@ function eveningFiveDay (array){
     }
   }
   for (var i = 0; i < 5; i++){
-    fiveDayEvening.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    fiveDayEvening.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   }
 }
 
-//Converts unix time to a readable date and time. 
+//Converts unix time to a readable UTC date and time. 
 function timeConverter(UNIX_timestamp){
+  let newDate = new Date(UNIX_timestamp * 1000);
+  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let year = newDate.getUTCFullYear();
+  let month = months[newDate.getUTCMonth()];
+  let date = newDate.getUTCDate();
+  let hour = newDate.getUTCHours();
+
+  //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
+  if (hour<10){
+    hour = `0${newDate.getUTCHours()}`;
+  } else {
+    hour = newDate.getUTCHours();
+  }
+  let min = newDate.getUTCMinutes();
+
+  //Places 0 in front of all minutes less than 10. (i.e. 06:00 vice 06:0).
+  if (min<10){
+    min = `0${newDate.getUTCMinutes()}`;
+  } else {
+    min = newDate.getUTCMinutes();
+  }
+  let time = `${date} ${month}, ${year} ${hour}:${min}`;
+  return time;
+}
+
+//Converts unix time to a readable local system date and time. 
+function localTimeConverter(UNIX_timestamp){
   let newDate = new Date(UNIX_timestamp * 1000);
   let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   let year = newDate.getFullYear();
@@ -280,9 +319,12 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
-//Used for time of day comparisons for current weather. 
-function timeConvertHourOnly(UNIX_timestamp){
-  let newDate = new Date(UNIX_timestamp * 1000);
+function localTimeAppend(){
+  let newDate = new Date();
+  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let year = newDate.getFullYear();
+  let month = months[newDate.getMonth()];
+  let date = newDate.getDate();
   let hour = newDate.getHours();
 
   //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
@@ -290,6 +332,31 @@ function timeConvertHourOnly(UNIX_timestamp){
     hour = `0${newDate.getHours()}`;
   } else {
     hour = newDate.getHours();
+  }
+  let min = newDate.getMinutes();
+
+  //Places 0 in front of all minutes less than 10. (i.e. 06:00 vice 06:0).
+  if (min<10){
+    min = `0${newDate.getMinutes()}`;
+  } else {
+    min = newDate.getMinutes();
+  }
+  let time = `${date} ${month}, ${year} ${hour}:${min}`;
+  let headerLocalTime = document.createElement("h2");
+  headerLocalTime.textContent = (`Your local time is: ${time}`);
+  header.append(headerLocalTime);
+}
+
+//Used for time of day comparisons for current weather. 
+function timeConvertHourOnly(UNIX_timestamp){
+  let newDate = new Date(UNIX_timestamp * 1000);
+  let hour = newDate.getUTCHours();
+
+  //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
+  if (hour<10){
+    hour = `0${newDate.getUTCHours()}`;
+  } else {
+    hour = newDate.getUTCHours();
   }
   let justHour = hour;
   return justHour;
@@ -324,6 +391,12 @@ function handleEnter(event){
     return;
   }
 }
+
+//Loads buttons when page loads.
+document.onload = handleLocalStorage();
+
+//Appends current system time to header when page loads.
+document.onload = localTimeAppend();
 
 //Event Listeners. 
 clearEl.addEventListener("click", handleClear);
