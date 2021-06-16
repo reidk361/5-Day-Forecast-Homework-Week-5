@@ -1,3 +1,4 @@
+//Get elements from the DOM
 const header = document.querySelector("header");
 const currentWeather = document.getElementById("current-weather-container");
 const fiveDayWeather = document.getElementById("5day-weather-container");
@@ -12,6 +13,7 @@ const clearEl = document.querySelector(".btn-danger");
 const cityNameEl = document.createElement("h2");
 const cityNameContainer = document.getElementById("city-name-container");
 
+//Set Global Elements that will be used in functions.
 let buttonEl = document.createElement("button");
 let singleMorningContainer = document.createElement("div");
 let morningEl = document.createElement("p");
@@ -20,7 +22,7 @@ let noonEl = document.createElement("p");
 let singleEveningContainer = document.createElement("div");
 let eveningEl = document.createElement("p");
 
-
+//Makes Buttons for previous searches. 
 function makeButton(city){
   clearEl.setAttribute("style","visibility: visible")
   let buttonArr = Array.from(document.querySelectorAll("button"));
@@ -36,21 +38,31 @@ function makeButton(city){
   buttonEl = document.createElement("button");
   buttonEl.classList.add("btn", "btn-primary", "text-capitalize");
   buttonEl.setAttribute("type", "button");
-  console.log(buttonTextArr);
+
+  //Prevents button with repeat cities being made.
   if (!buttonTextArr.includes(city.toLowerCase())){
     buttonEl.textContent = city;
     prevInputContainer.append(buttonEl);
+    
+    //Allows all buttons made in this function to be clickable. 
     buttonEl.addEventListener("click", handleButton);
   }
+
+  //Deletes oldest button after 8.
   if (buttonArr.length>8){
     prevInputContainer.removeChild(prevInputContainer.childNodes[0])
   }
+
+  //Saves button values for localStorage.
   handleSave();
+
+  //Allows button text to search for weather. 
   function handleButton (event){
     getCity(event.target.textContent);
   }
 }
 
+//Puts button text for all present buttons to local storage.
 function handleSave(){
   let buttonElArr = prevInputContainer.children;
   let arr = []
@@ -60,15 +72,20 @@ function handleSave(){
   localStorage.setItem("buttonText", arr.toString());
 }
 
+//Loads buttons onto page.
 function handleLocalStorage(){
   let storage = localStorage.getItem("buttonText");
   let storageArr = []
   if (storage){
     storageArr = storage.split(",");
   }
+
+  //If there are more than 8 strings, this will make sure only 8 buttons are made.
   while (storageArr.length > 8){
     storageArr.pop();
   }
+
+  //Prevents making empty buttons.
   if (storageArr.length>0){  
     for (let i = 0; i <storageArr.length; i++) {
       makeButton(storageArr[i]);
@@ -76,11 +93,16 @@ function handleLocalStorage(){
   }
 }
 
+//Loads buttons when page loads.
 document.onload = handleLocalStorage();
 
+//Gets data from search and places it into the button. 
+//Returns latitude & longitude and cityID data to pass onto other functions.  
 function getCity(city){
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=86caed8984442f53f479ce0a825d902d&units=imperial`)
   .then(function (response) {
+
+    //Prevents a button being made if the city does not exist in their database.
     if (response.ok){
       makeButton(city);
     }
@@ -97,6 +119,7 @@ function getCity(city){
   })
 }
 
+//Uses latitude and longitude to get the current weather. 
 function getCurrentForecast (latitude, longitude) {
   currentWeather.setAttribute("style","");
   currentWeatherEl.setAttribute("id","current-container");
@@ -105,11 +128,17 @@ function getCurrentForecast (latitude, longitude) {
   .then(function (response) {
     return response.json();
   })
+
+  //Creates current weather block and adds all applicable data. 
   .then(function (data) {
     currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
+
+    //Gets element that controls just UV data.
     let uvContainer = document.getElementById("UV-container");
     let uvNum = data.daily[data.daily.length-1].uvi;
+
+    //Changes UV data's color based on UV charts for severity. 
     if (uvNum>=11){
       uvContainer.setAttribute("style","background-color:purple; padding:1%; border-radius: 5rem;");
     } else if (uvNum<11&&uvNum>=8) {
@@ -124,6 +153,7 @@ function getCurrentForecast (latitude, longitude) {
   }) 
 }
 
+//Places forecasts for morning, noon, and evening into their own array to be passed on later.  
 function get5DayForecast(id){
   fiveDayWeather.setAttribute("style","");
   let fiveDayMorningArr = [];
@@ -133,6 +163,8 @@ function get5DayForecast(id){
   .then(function (response) {
      return response.json();
   })
+
+  //Grabs only the applicable arrays.
   .then(function (data) {
     for (var i = 0; i < data.list.length; i++) {
       if (data.list[i].dt_txt.includes("06:00:00")){
@@ -145,16 +177,16 @@ function get5DayForecast(id){
         fiveDayEveningArr.push(data.list[i]);
       }
     }
-    console.log(fiveDayMorningArr);
     morningFiveDay(fiveDayMorningArr);
-    console.log(fiveDayNoonArr);
     noonFiveDay(fiveDayNoonArr);
-    console.log(fiveDayEveningArr);
     eveningFiveDay(fiveDayEveningArr);
   })
 }
 
+//Like current weather, but pulling from 06:00 array. 
 function morningFiveDay (array){
+
+  //Makes containers for each day only if there are none. 
   if (!fiveDayMorning.contains(singleMorningContainer)){
     for (var i = 0; i < 5; i++) {
       singleMorningContainer = document.createElement("div");
@@ -165,11 +197,14 @@ function morningFiveDay (array){
       singleMorningContainer.append(morningEl);
     }
   }
+
+  //Places applicable data into those blocks.
   for (var i = 0; i < 5; i++){
     fiveDayMorning.children[i+1].children[0].innerHTML = (`<h3>${timeConverter(array[i].dt+25200)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   } 
 }
 
+//Same as morningFiveDay, but pulling from 12:00 array.
 function noonFiveDay (array){
   if (!fiveDayNoon.contains(singleNoonContainer)){
     for (var i = 0; i < 5; i++) {
@@ -186,6 +221,7 @@ function noonFiveDay (array){
   }
 }
 
+//Same as morningFiveDay and noonFiveDay, but pulling from 18:00 array.
 function eveningFiveDay (array){
   if (!fiveDayEvening.contains(singleEveningContainer)){
     for (var i = 0; i < 5; i++) {
@@ -202,6 +238,7 @@ function eveningFiveDay (array){
   }
 }
 
+//Converts unix time to a readable date and time. 
 function timeConverter(UNIX_timestamp){
   let newDate = new Date(UNIX_timestamp * 1000);
   let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -209,12 +246,16 @@ function timeConverter(UNIX_timestamp){
   let month = months[newDate.getMonth()];
   let date = newDate.getDate();
   let hour = newDate.getHours();
+
+  //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
   if (hour<10){
     hour = `0${newDate.getHours()}`;
   } else {
     hour = newDate.getHours();
   }
   let min = newDate.getMinutes();
+
+  //Places 0 in front of all minutes less than 10. (i.e. 06:00 vice 06:0).
   if (min<10){
     min = `0${newDate.getMinutes()}`;
   } else {
@@ -224,6 +265,7 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
+//Submits search and clears search bar. Prevents search if search bar is blank.
 function handleSubmit (event){
   event.preventDefault();
   if (inputEl.value !=''){
@@ -232,6 +274,7 @@ function handleSubmit (event){
   inputEl.value = '';
 }
 
+//Clears local storage, removes search buttons, and reloads page. 
 function handleClear (event){
   event.preventDefault();
   while (prevInputContainer.childNodes.length>0){
@@ -243,6 +286,16 @@ function handleClear (event){
   return;
 }
 
-clearEl.addEventListener("click", handleClear);
+//Allows you to press Enter in the search bar instead of clicking Search. 
+function handleEnter(event){
+  if (event.key === 'Enter'){
+    handleSubmit(event);
+  } else {
+    return;
+  }
+}
 
+//Event Listeners. 
+clearEl.addEventListener("click", handleClear);
 submitEl.addEventListener("click", handleSubmit);
+inputEl.addEventListener("keydown", handleEnter);
