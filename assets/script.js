@@ -7,7 +7,7 @@ const fiveDayEvening = document.getElementById("5day-evening-container");
 const currentWeatherEl = document.createElement("div")
 const prevInputContainer = document.getElementById("prev-input-container");
 const inputEl = document.getElementById("city-input");
-const submitEl = document.getElementById("submit-button");
+const submitEl = document.getElementById("button-addon2");
 const cityNameEl = document.createElement("h2");
 const cityNameContainer = document.getElementById("city-name-container");
 
@@ -28,9 +28,11 @@ function makeButton(city){
       buttonTextArr.push(buttonArr[i].innerText)}
   }
   buttonEl = document.createElement("button");
+  buttonEl.classList.add("btn", "btn-primary");
+  buttonEl.setAttribute("type", "button");
   let arr = [];
   arr.unshift(city);
-  while (arr.length > 4){
+  while (arr.length > 8){
     arr.pop();
   }
   console.log(arr);

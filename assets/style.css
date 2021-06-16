@@ -62,7 +62,14 @@ header {
         rgb(10, 0, 151) 100%);
 }
 
-input{
-    font-size: small
+button {
+    color:lightblue;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+#prev-input-container button {
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: .5%;
 }
 
