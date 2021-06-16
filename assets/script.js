@@ -135,19 +135,19 @@ function getCurrentForecast (latitude, longitude) {
 
     //Changes current weather background based on time of day.
     if (timeConvertHourOnly((data.current.dt)
-    +(timezoneOffset))>=06&&
+    +(timezoneOffset))>=05&&
       timeConvertHourOnly((data.current.dt)
-    +(timezoneOffset))<12){
+    +(timezoneOffset))<11){
       currentWeatherEl.setAttribute("style","background-image: linear-gradient(rgb(206, 111, 3) 0%,rgb(0, 132, 255) 100%");
     } else if (timeConvertHourOnly((data.current.dt)
-    +(timezoneOffset))>=12&&
+    +(timezoneOffset))>=11&&
       timeConvertHourOnly((data.current.dt)
-    +(timezoneOffset))<18){
+    +(timezoneOffset))<17){
       currentWeatherEl.setAttribute("style", "background-color: rgb(0, 132, 255);");
     } else if (timeConvertHourOnly((data.current.dt)
-    +(timezoneOffset))>=18&&
+    +(timezoneOffset))>=17&&
       timeConvertHourOnly((data.current.dt)
-    +(timezoneOffset))<21){
+    +(timezoneOffset))<22){
       currentWeatherEl.setAttribute("style","background-image: linear-gradient(rgb(0, 132, 255) 0%,rgb(10, 0, 151) 100%");
     } else {
       currentWeatherEl.setAttribute("style", "background-color: rgb(10, 0, 151);");
