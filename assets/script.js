@@ -133,6 +133,21 @@ function getCurrentForecast (latitude, longitude) {
   .then(function (data) {
     currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
+    
+    //Changes current weather background based on time of day.
+    if (timeConvertHourOnly(data.current.dt)>=06&&
+        timeConvertHourOnly(data.current.dt)<12){
+      currentWeatherEl.setAttribute("style","background-image: linear-gradient(rgb(206, 111, 3) 0%,rgb(0, 132, 255) 100%");
+    } else if (timeConvertHourOnly(data.current.dt)>=12&&
+        timeConvertHourOnly(data.current.dt)<18){
+      currentWeatherEl.setAttribute("style", "background-color: rgb(0, 132, 255);");
+    } else if (timeConvertHourOnly(data.current.dt)>=18&&
+        timeConvertHourOnly(data.current.dt)<21){
+      currentWeatherEl.setAttribute("style","background-image: linear-gradient(rgb(0, 132, 255) 0%,rgb(10, 0, 151) 100%");
+    } else {
+      currentWeatherEl.setAttribute("style", "background-color: rgb(10, 0, 151);");
+    }
+
 
     //Gets element that controls just UV data.
     let uvContainer = document.getElementById("UV-container");
@@ -264,6 +279,21 @@ function timeConverter(UNIX_timestamp){
   let time = `${date} ${month}, ${year} ${hour}:${min}`;
   return time;
 }
+
+//Used for time of day comparisons for current weather. 
+function timeConvertHourOnly(UNIX_timestamp){
+  let newDate = new Date(UNIX_timestamp * 1000);
+  let hour = newDate.getHours();
+
+  //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
+  if (hour<10){
+    hour = `0${newDate.getHours()}`;
+  } else {
+    hour = newDate.getHours();
+  }
+  let justHour = hour;
+  return justHour;
+} 
 
 //Submits search and clears search bar. Prevents search if search bar is blank.
 function handleSubmit (event){
