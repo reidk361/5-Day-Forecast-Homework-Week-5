@@ -28,7 +28,7 @@ function makeButton(city){
       buttonTextArr.push(buttonArr[i].innerText)}
   }
   buttonEl = document.createElement("button");
-  buttonEl.classList.add("btn", "btn-primary");
+  buttonEl.classList.add("btn", "btn-primary", "text-capitalize");
   buttonEl.setAttribute("type", "button");
   let arr = [];
   arr.unshift(city);
@@ -52,6 +52,9 @@ function makeButton(city){
 function getCity(city){
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=86caed8984442f53f479ce0a825d902d&units=imperial`)
   .then(function (response) {
+    if (response.ok){
+      makeButton(city);
+    }
     return response.json();
   })
   .then(function (data) {
@@ -194,7 +197,6 @@ function handleSubmit (event){
   event.preventDefault();
   if (inputEl.value !=''){
     getCity(inputEl.value);
-    makeButton(inputEl.value);
   }  
   inputEl.value = '';
 }
