@@ -25,7 +25,7 @@ function makeButton(city){
   let buttonTextArr = [];
   if (buttonArr.length>0){
     for (let i=0; i < buttonArr.length; i++) {
-      buttonTextArr.push(buttonArr[i].innerText)}
+      buttonTextArr.push(buttonArr[i].innerText.toLowerCase())}
   }
   buttonEl = document.createElement("button");
   buttonEl.classList.add("btn", "btn-primary", "text-capitalize");
@@ -36,7 +36,7 @@ function makeButton(city){
     arr.pop();
   }
   console.log(arr);
-  if (!buttonTextArr.includes(city)){
+  if (!buttonTextArr.includes(city.toLowerCase())){
     for (var i = 0; i <arr.length; i++) {
       buttonEl.textContent = arr[i];
       prevInputContainer.append(buttonEl);
