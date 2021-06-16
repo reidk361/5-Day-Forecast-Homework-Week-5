@@ -12,6 +12,7 @@ const submitEl = document.getElementById("button-addon2");
 const clearEl = document.querySelector(".btn-danger");
 const cityNameEl = document.createElement("h2");
 const cityNameContainer = document.getElementById("city-name-container");
+const favicon = document.getElementById("favicon")
 
 //Set Global variables that will be used in functions.
 let buttonEl = document.createElement("button");
@@ -120,7 +121,6 @@ function getCity(city){
 
 //Uses latitude and longitude to get the current weather. 
 function getCurrentForecast (latitude, longitude) {
-
   currentWeather.setAttribute("style","");
   currentWeatherEl.setAttribute("id","current-container");
   currentWeatherEl.classList.add("col-md-4", "col-6");
@@ -132,6 +132,9 @@ function getCurrentForecast (latitude, longitude) {
   .then(function (data) {
     currentWeatherEl.innerHTML = (`<h3>${timeConverter((data.current.dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${(Math.trunc(data.daily[0].uvi))}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
+
+    //Changes favicon based on current weather search. 
+    favicon.setAttribute("href", `http://openweathermap.org/img/w/${data.current.weather[0].icon}.png`);
 
     //Changes current weather background based on time of day.
     if (timeConvertHourOnly((data.current.dt)
@@ -318,6 +321,13 @@ function localTimeAppend(){
   let month = months[newDate.getMonth()];
   let date = newDate.getDate();
   let hour = newDate.getHours();
+
+  //Before search, sets favicon to a clear sky day or night based on local time. 
+  if (hour>4&&hour<22){
+    favicon.setAttribute("href", `http://openweathermap.org/img/w/01d.png`);
+  } else {
+    favicon.setAttribute("href", `http://openweathermap.org/img/w/01n.png`);
+  }
 
   //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
   if (hour<10){
