@@ -22,6 +22,7 @@ let eveningEl = document.createElement("p");
 
 
 function makeButton(city){
+  clearEl.setAttribute("style","visibility: visible")
   let buttonArr = Array.from(document.querySelectorAll("button"));
   let buttonTextArr = [];
   if (buttonArr.length>0){
@@ -236,7 +237,9 @@ function handleClear (event){
   while (prevInputContainer.childNodes.length>0){
     prevInputContainer.removeChild(prevInputContainer.childNodes[0]);
   }
+  clearEl.setAttribute("style","visibility:hidden")
   localStorage.setItem("buttonText","");
+  location.reload();
   return;
 }
 
