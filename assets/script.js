@@ -115,7 +115,6 @@ function getCity(city){
     let cityId = data.id;
     get5DayForecast(cityId)
     timezoneOffset = data.timezone;
-    console.log(timezoneOffset);
   })
 }
 
@@ -187,13 +186,7 @@ function get5DayForecast(id){
 
   //Grabs only the applicable arrays.
   .then(function (data) {
-    console.log(timezoneOffset);
-    console.log(data);
     for (var i = 0; i < data.list.length; i++) {
-      console.log(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset)));
-      //console.log(["05","06","07"].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset))));
-      //console.log([11,12,13].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset))));
-      //console.log([17,18,19].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset))));
       if (["05","06","07"].includes(timeConvertHourOnly((data.list[i].dt)+(timezoneOffset)))){
         fiveDayMorningArr.push(data.list[i]);
       }
@@ -204,7 +197,6 @@ function get5DayForecast(id){
         fiveDayEveningArr.push(data.list[i]);
       }
     }
-    console.log(fiveDayMorningArr);
     morningFiveDay(fiveDayMorningArr);
     noonFiveDay(fiveDayNoonArr);
     eveningFiveDay(fiveDayEveningArr);
