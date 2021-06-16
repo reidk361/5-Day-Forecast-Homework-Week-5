@@ -130,11 +130,11 @@ function getCurrentForecast (latitude, longitude) {
   })
   //Creates current weather block and adds all applicable data. 
   .then(function (data) {
-    currentWeatherEl.innerHTML = (`<h3>${timeConverter((data.current.dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${(Math.trunc(data.daily[0].uvi))}</span> <br /></p>`);
+    currentWeatherEl.innerHTML = (`<h3>${timeConverter((data.current.dt)+(timezoneOffset))}</h3><img id="weather-icon" src="https://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${(Math.trunc(data.daily[0].uvi))}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
 
     //Changes favicon based on current weather search. 
-    favicon.setAttribute("href", `http://openweathermap.org/img/w/${data.current.weather[0].icon}.png`);
+    favicon.setAttribute("href", `https://openweathermap.org/img/w/${data.current.weather[0].icon}.png`);
 
     //Changes current weather background based on time of day.
     if (timeConvertHourOnly((data.current.dt)
@@ -222,7 +222,7 @@ function morningFiveDay (array){
   }
   //Places applicable data into those blocks.
   for (var i = 0; i < 5; i++){
-    fiveDayMorning.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    fiveDayMorning.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="https://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   } 
 }
 
@@ -239,7 +239,7 @@ function noonFiveDay (array){
     }
   }
   for (var i = 0; i < 5; i++){
-    fiveDayNoon.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    fiveDayNoon.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="https://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   }
 }
 
@@ -256,7 +256,7 @@ function eveningFiveDay (array){
     }
   }
   for (var i = 0; i < 5; i++){
-    fiveDayEvening.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
+    fiveDayEvening.children[i+1].children[0].innerHTML = (`<h3>${timeConverter((array[i].dt)+(timezoneOffset))}</h3><img id="weather-icon" src="https://openweathermap.org/img/w/${array[i].weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${array[i].weather[0].description}</span> <br /> Wind: ${array[i].wind.speed} MPH <br /> Temp: ${array[i].main.temp} &#730;F <br /> Humidity: ${array[i].main.humidity}%</p>`);
   }
 }
 
@@ -324,9 +324,9 @@ function localTimeAppend(){
 
   //Before search, sets favicon to a clear sky day or night based on local time. 
   if (hour>4&&hour<22){
-    favicon.setAttribute("href", `http://openweathermap.org/img/w/01d.png`);
+    favicon.setAttribute("href", `https://openweathermap.org/img/w/01d.png`);
   } else {
-    favicon.setAttribute("href", `http://openweathermap.org/img/w/01n.png`);
+    favicon.setAttribute("href", `https://openweathermap.org/img/w/01n.png`);
   }
 
   //Places 0 in front of all hours less than 10. (i.e. 06:00 vice 6:00).
