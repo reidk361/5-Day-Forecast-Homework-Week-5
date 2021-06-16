@@ -49,7 +49,7 @@ function makeButton(city){
   }
 
   //Deletes oldest button after 8.
-  if (buttonArr.length>8){
+  if (prevInputContainer.childNodes.length>8){
     prevInputContainer.removeChild(prevInputContainer.childNodes[0])
   }
 
