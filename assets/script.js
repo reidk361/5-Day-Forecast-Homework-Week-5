@@ -131,7 +131,7 @@ function getCurrentForecast (latitude, longitude) {
 
   //Creates current weather block and adds all applicable data. 
   .then(function (data) {
-    currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${data.daily[data.daily.length-1].uvi}</span> <br /></p>`);
+    currentWeatherEl.innerHTML = (`<h3>${timeConverter(data.current.dt)}</h3><img id="weather-icon" src="http://openweathermap.org/img/w/${data.current.weather[0].icon}.png" alt="Weather icon"><p><span class="text-capitalize">${data.current.weather[0].description}</span> <br /> Wind: ${data.current.wind_speed} MPH <br /> Temp: ${data.current.temp} &#730;F <br /> Humidity: ${data.current.humidity}% <br /> <span id = UV-container>UV Index: ${(Math.trunc(data.daily[0].uvi))}</span> <br /></p>`);
     currentWeather.append(currentWeatherEl);
     
     //Changes current weather background based on time of day.
@@ -151,7 +151,7 @@ function getCurrentForecast (latitude, longitude) {
 
     //Gets element that controls just UV data.
     let uvContainer = document.getElementById("UV-container");
-    let uvNum = data.daily[data.daily.length-1].uvi;
+    let uvNum = (Math.trunc(data.daily[0].uvi));
 
     //Changes UV data's color based on UV charts for severity. 
     if (uvNum>=11){
