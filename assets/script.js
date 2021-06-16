@@ -8,6 +8,7 @@ const currentWeatherEl = document.createElement("div")
 const prevInputContainer = document.getElementById("prev-input-container");
 const inputEl = document.getElementById("city-input");
 const submitEl = document.getElementById("button-addon2");
+const clearEl = document.querySelector(".btn-danger");
 const cityNameEl = document.createElement("h2");
 const cityNameContainer = document.getElementById("city-name-container");
 
@@ -25,29 +26,56 @@ function makeButton(city){
   let buttonTextArr = [];
   if (buttonArr.length>0){
     for (let i=0; i < buttonArr.length; i++) {
-      buttonTextArr.push(buttonArr[i].innerText.toLowerCase())}
+      if (buttonArr[i].innerText!="Search"&&
+          buttonArr[i].innerText!="Clear"){
+        buttonTextArr.push(buttonArr[i].innerText.toLowerCase());
+      }
+    }
   }
   buttonEl = document.createElement("button");
   buttonEl.classList.add("btn", "btn-primary", "text-capitalize");
   buttonEl.setAttribute("type", "button");
-  let arr = [];
-  arr.unshift(city);
-  while (arr.length > 8){
-    arr.pop();
-  }
-  console.log(arr);
+  console.log(buttonTextArr);
   if (!buttonTextArr.includes(city.toLowerCase())){
-    for (var i = 0; i <arr.length; i++) {
-      buttonEl.textContent = arr[i];
-      prevInputContainer.append(buttonEl);
-      buttonEl.addEventListener("click", handleButton);
-    }
+    buttonEl.textContent = city;
+    prevInputContainer.append(buttonEl);
+    buttonEl.addEventListener("click", handleButton);
   }
+  if (buttonArr.length>8){
+    prevInputContainer.removeChild(prevInputContainer.childNodes[0])
+  }
+  handleSave();
   function handleButton (event){
     getCity(event.target.textContent);
   }
 }
 
+function handleSave(){
+  let buttonElArr = prevInputContainer.children;
+  let arr = []
+  for (let i=0; i<buttonElArr.length; i++){
+    arr.push(buttonElArr[i].textContent);
+  }
+  localStorage.setItem("buttonText", arr.toString());
+}
+
+function handleLocalStorage(){
+  let storage = localStorage.getItem("buttonText");
+  let storageArr = []
+  if (storage){
+    storageArr = storage.split(",");
+  }
+  while (storageArr.length > 8){
+    storageArr.pop();
+  }
+  if (storageArr.length>0){  
+    for (let i = 0; i <storageArr.length; i++) {
+      makeButton(storageArr[i]);
+    }
+  }
+}
+
+document.onload = handleLocalStorage();
 
 function getCity(city){
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=86caed8984442f53f479ce0a825d902d&units=imperial`)
@@ -69,8 +97,9 @@ function getCity(city){
 }
 
 function getCurrentForecast (latitude, longitude) {
-  currentWeatherEl.setAttribute("id","current-container")
-  currentWeatherEl.classList.add("col-md-4", "col-6")
+  currentWeather.setAttribute("style","");
+  currentWeatherEl.setAttribute("id","current-container");
+  currentWeatherEl.classList.add("col-md-4", "col-6");
   fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&appid=86caed8984442f53f479ce0a825d902d&units=imperial`)
   .then(function (response) {
     return response.json();
@@ -95,6 +124,7 @@ function getCurrentForecast (latitude, longitude) {
 }
 
 function get5DayForecast(id){
+  fiveDayWeather.setAttribute("style","");
   let fiveDayMorningArr = [];
   let fiveDayNoonArr = [];
   let fiveDayEveningArr = [];
@@ -201,6 +231,15 @@ function handleSubmit (event){
   inputEl.value = '';
 }
 
+function handleClear (event){
+  event.preventDefault();
+  while (prevInputContainer.childNodes.length>0){
+    prevInputContainer.removeChild(prevInputContainer.childNodes[0]);
+  }
+  localStorage.setItem("buttonText","");
+  return;
+}
 
+clearEl.addEventListener("click", handleClear);
 
 submitEl.addEventListener("click", handleSubmit);
