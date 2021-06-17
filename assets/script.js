@@ -103,7 +103,7 @@ function getCity(city){
 
     //Prevents a button being made if the city does not exist in their database.
     if (response.ok){
-      makeButton(city);
+      makeButton(city.toLowerCase());
     }
     return response.json();
   })
